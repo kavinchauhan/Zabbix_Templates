@@ -6,7 +6,7 @@
 # Requires:             Zabbix Sender, zabbix-opensips.py
 
 get_OpenSIPs_metrics(){
-python3 /usr/local/bin/zabbix-opensips.py
+python3 /etc/zabbix/scripts/zabbix-opensips.py
 }
 
 # Send the results to zabbix server by using zabbix sender

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>5.0</version>
-    <date>2021-01-24T11:57:45Z</date>
+    <date>2021-03-28T09:57:09Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -23,12 +23,48 @@
             </applications>
             <items>
                 <item>
+                    <name>OpenSIPs::Service Status</name>
+                    <type>ZABBIX_ACTIVE</type>
+                    <key>net.udp.listen[&quot;{$OPENSIPS_PORT}&quot;]</key>
+                    <delay>60</delay>
+                    <history>28d</history>
+                    <applications>
+                        <application>
+                            <name>OpenSIPs</name>
+                        </application>
+                    </applications>
+                    <valuemap>
+                        <name>OpenSIPs Ok Status</name>
+                    </valuemap>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}=0</expression>
+                            <name>OpenSIPs: Process is not running</name>
+                            <priority>HIGH</priority>
+                        </trigger>
+                    </triggers>
+                </item>
+                <item>
                     <name>OpenSIPs::zabbix sender</name>
                     <type>ZABBIX_ACTIVE</type>
                     <key>opensips.zabbix.sender</key>
                     <delay>30</delay>
                     <history>28d</history>
                     <description>A script to send opensips stats</description>
+                    <applications>
+                        <application>
+                            <name>OpenSIPs</name>
+                        </application>
+                    </applications>
+                </item>
+                <item>
+                    <name>OpenSIPs::Full Opensips Status</name>
+                    <type>TRAP</type>
+                    <key>osips.allstats</key>
+                    <delay>0</delay>
+                    <trends>0</trends>
+                    <value_type>TEXT</value_type>
+                    <description>Provide all opensips stats using opensipsctl fifo get_statistics all</description>
                     <applications>
                         <application>
                             <name>OpenSIPs</name>
@@ -49,7 +85,7 @@
                 </item>
                 <item>
                     <name>OpenSIPs::BadMessageHeader</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.core.bad_message_header</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -58,10 +94,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>core:bad_msg_hdr:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::BadURIReceived</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.core.bad_URIs_rcvd</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -70,10 +116,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>core:bad_URIs_rcvd:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::ErrorReply</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.core.err_replies</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -82,10 +138,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>core:err_replies:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::ErrorRequests</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.core.err_requests</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -94,10 +160,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>core:err_requests:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::ForwardReplies</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.core.fwd_replies</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -106,10 +182,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>core:fwd_replies:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::ForwardRequests</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.core.fwd_requests</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -118,10 +204,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>core:fwd_requests:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::ReceiveReplies</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.core.rcv_replies</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -130,10 +226,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>core:rcv_replies:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::ReceiveRequests</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.core.rcv_request</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -142,10 +248,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>core:rcv_requests:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::Timestamp</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.core.timestamp</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -154,10 +270,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>core:timestamp:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::UnsupportedMethods</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.core.unsupported_methods</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -166,10 +292,152 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>core:unsupported_methods:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>OpenSIPs::Load-All</name>
+                    <type>DEPENDENT</type>
+                    <key>osips.load-all</key>
+                    <delay>0</delay>
+                    <description>The realtime load of entire OpenSIPS, counting both core and module processes</description>
+                    <applications>
+                        <application>
+                            <name>OpenSIPs</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>load:load-all:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>OpenSIPs::Load Core/SIP</name>
+                    <type>DEPENDENT</type>
+                    <key>osips.load.core_sip</key>
+                    <delay>0</delay>
+                    <description>Provide the OpenSIPS processing current load.</description>
+                    <applications>
+                        <application>
+                            <name>OpenSIPs</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>load:load:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>OpenSIPs::Load1m Core/SIP</name>
+                    <type>DEPENDENT</type>
+                    <key>osips.load1m.core_sip</key>
+                    <delay>0</delay>
+                    <description>The last minute average load of core OpenSIPS (covering only core/SIP processes).</description>
+                    <applications>
+                        <application>
+                            <name>OpenSIPs</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>load:load1m:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>OpenSIPs::Load1m-All</name>
+                    <type>DEPENDENT</type>
+                    <key>osips.load1m_all</key>
+                    <delay>0</delay>
+                    <description>The last minute average load of entire OpenSIPS (covering all processes).</description>
+                    <applications>
+                        <application>
+                            <name>OpenSIPs</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>load:load1m-all:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>OpenSIPs::Load10m Core/SIP</name>
+                    <type>DEPENDENT</type>
+                    <key>osips.load10m.core_sip</key>
+                    <delay>0</delay>
+                    <description>The last 10 minutes average load of core OpenSIPS (covering only core/SIP processes)</description>
+                    <applications>
+                        <application>
+                            <name>OpenSIPs</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>load:load10m:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>OpenSIPs::Load10m-All</name>
+                    <type>DEPENDENT</type>
+                    <key>osips.load10m_all</key>
+                    <delay>0</delay>
+                    <description>The last 10 minutes average load of entire OpenSIPS (covering all processes).</description>
+                    <applications>
+                        <application>
+                            <name>OpenSIPs</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>load:load10m-all:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::WaitingTCP</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.net.waiting_tcp</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -178,10 +446,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>net:waiting_tcp:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::WaitingTLS</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.net.waiting_tls</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -190,10 +468,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>net:waiting_tls:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::WaitingUDP</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.net.waiting_upd</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -202,6 +490,16 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>net:waiting_udp:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::TotalRTPSockets</name>
@@ -217,7 +515,7 @@
                 </item>
                 <item>
                     <name>OpenSIPs::TotalSharedMemoryFragment</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.shmem.fragments</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -226,10 +524,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>shmem:fragments:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::TotalSharedMemoryFree</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.shmem.free</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -238,10 +546,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>shmem:free_size:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::TotalSharedMemoryUsedReal</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.shmem.real</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -250,10 +568,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>shmem:real_used_size:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::TotalSharedMemoryAvailable</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.shmem.total</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -262,10 +590,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>shmem:total_size:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::TotalSharedMemoryUse</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.shmem.used</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -274,10 +612,41 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>shmem:used_size:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>OpenSIPs::TotalSharedMemoryUsedMax</name>
+                    <type>DEPENDENT</type>
+                    <key>osips.shmem.used.max</key>
+                    <delay>0</delay>
+                    <applications>
+                        <application>
+                            <name>OpenSIPs</name>
+                        </application>
+                    </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>shmem:max_used_size:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::1XX Replies</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.sl.1xx_replies</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -286,10 +655,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>sl:1xx_replies:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::2XX Replies</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.sl.2xx_replies</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -298,10 +677,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>sl:2xx_replies:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::3XX Replies</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.sl.3xx_replies</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -310,10 +699,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>sl.3xx_replies:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::4XX Replies</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.sl.4xx_replies</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -322,10 +721,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>sl.4xx_replies:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::5XX Replies</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.sl.5xx_replies</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -334,10 +743,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>sl.5xx_replies:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::6XX Replies</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.sl.6xx_replies</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -346,10 +765,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>sl.6xx_replies:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::2XXTransaction</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.tm.2xx_transactions</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -358,10 +787,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>tm:2xx_transactions:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::3XXTransaction</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.tm.3xx_transactions</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -370,10 +809,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>tm.3xx_transactions:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::4XXTransaction</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.tm.4xx_transactions</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -382,10 +831,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>tm.4xx_transactions:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::5XXTransaction</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.tm.5xx_transactions</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -394,10 +853,20 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>tm.5xx_transactions:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
                 </item>
                 <item>
                     <name>OpenSIPs::6XXTransaction</name>
-                    <type>TRAP</type>
+                    <type>DEPENDENT</type>
                     <key>osips.tm.6xx_transactions</key>
                     <delay>0</delay>
                     <history>28d</history>
@@ -406,8 +875,66 @@
                             <name>OpenSIPs</name>
                         </application>
                     </applications>
+                    <preprocessing>
+                        <step>
+                            <type>REGEX</type>
+                            <params>tm.6xx_transactions:: ([^\t]+)
+\1</params>
+                        </step>
+                    </preprocessing>
+                    <master_item>
+                        <key>osips.allstats</key>
+                    </master_item>
+                </item>
+                <item>
+                    <name>OpenSIPs::Uptime</name>
+                    <type>TRAP</type>
+                    <key>osips.uptime</key>
+                    <delay>0</delay>
+                    <history>7d</history>
+                    <units>uptime</units>
+                    <description>Service uptime in seconds</description>
+                    <applications>
+                        <application>
+                            <name>OpenSIPs</name>
+                        </application>
+                    </applications>
+                    <triggers>
+                        <trigger>
+                            <expression>{last()}&lt;10m</expression>
+                            <name>OpenSIPs: has been restarted (uptime &lt; 10m)</name>
+                            <priority>INFO</priority>
+                            <description>Uptime is less than 10 minutes</description>
+                            <manual_close>YES</manual_close>
+                        </trigger>
+                    </triggers>
                 </item>
             </items>
+            <macros>
+                <macro>
+                    <macro>{$OPENSIPS_PORT}</macro>
+                    <value>5060</value>
+                </macro>
+                <macro>
+                    <macro>{$OPENSIPS_PROTO}</macro>
+                    <value>udp</value>
+                </macro>
+            </macros>
         </template>
     </templates>
+    <value_maps>
+        <value_map>
+            <name>OpenSIPs Ok Status</name>
+            <mappings>
+                <mapping>
+                    <value>0</value>
+                    <newvalue>False</newvalue>
+                </mapping>
+                <mapping>
+                    <value>1</value>
+                    <newvalue>True</newvalue>
+                </mapping>
+            </mappings>
+        </value_map>
+    </value_maps>
 </zabbix_export>
